@@ -1,23 +1,11 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\RegisterController;
-use App\Http\Controllers\LoginController;
+use App\Http\Controllers\NhanVienController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
-Route::get('/register', [RegisterController::class, 'showForm']);
-Route::post('/register', [RegisterController::class, 'register']);
-
-Route::get('/login', [LoginController::class, 'showForm']);
-Route::post('/login', [LoginController::class, 'login']);
-Route::get('/logout', [LoginController::class, 'logout']);
-
-Route::get('/home', function () {
-    if (auth()->check()) {
-        return view('home');
-    }
-    return redirect('/login');
-});
+Route::get('/nhanvien', [NhanVienController::class, 'index']);
+Route::get('/nhanvien/create', [NhanVienController::class, 'create']);
+Route::post('/nhanvien/store', [NhanVienController::class, 'store']);
+Route::get('/nhanvien/edit/{id}', [NhanVienController::class, 'edit']);
+Route::post('/nhanvien/update/{id}', [NhanVienController::class, 'update']);
+Route::post('/nhanvien/delete/{id}', [NhanVienController::class, 'destroy']);
