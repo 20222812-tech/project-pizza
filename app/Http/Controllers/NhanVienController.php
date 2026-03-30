@@ -7,11 +7,18 @@ use App\Models\NhanVien;
 
 class NhanVienController extends Controller
 {
-    public function index()
-    {
-        $nhanviens = NhanVien::all();
-        return view('nhanvien.index', compact('nhanviens'));
-    }
+     public function index(Request $request)
+{
+    $search = $request->search;
+
+    $nhanviens = NhanVien::when($search, function ($query) use ($search) {
+        return $query->where('ten', 'like', "%$search%")
+                     ->orWhere('email', 'like', "%$search%")
+                     ->orWhere('sdt', 'like', "%$search%");
+    })->get();
+
+    return view('nhanvien.index', compact('nhanviens'));
+}
 
     public function create()
     {
