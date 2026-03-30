@@ -13,7 +13,15 @@
     @endif
 
     <h2 class="text-center text-primary mb-4">🍕 QUẢN LÝ NHÂN VIÊN</h2>
-
+<form method="GET" action="/nhanvien" class="mb-3 d-flex">
+    <input 
+        type="text" 
+        name="search" 
+        class="form-control me-2" 
+        placeholder="🔍 Tìm theo tên, email, SĐT"
+        value="{{ request('search') }}"
+    >
+    <button class="btn btn-primary">Tìm</button>
     <div class="d-flex justify-content-between mb-3">
         <h5>Danh sách</h5>
         <a href="/nhanvien/create" class="btn btn-success">➕ Thêm</a>
