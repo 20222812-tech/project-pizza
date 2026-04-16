@@ -7,7 +7,7 @@ use App\Models\NhanVien;
 
 class NhanVienController extends Controller
 {
-     public function index(Request $request)
+    public function index(Request $request)
 {
     $search = $request->search;
 
@@ -19,6 +19,7 @@ class NhanVienController extends Controller
 
     return view('nhanvien.index', compact('nhanviens'));
 }
+
 
     public function create()
     {

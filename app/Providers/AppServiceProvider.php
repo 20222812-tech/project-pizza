@@ -19,6 +19,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // Auto-login as admin - không cần đăng nhập
+        if (!\auth()->check()) {
+            $admin = \App\Models\User::where('role', 'admin')->first();
+            if ($admin) {
+                \auth()->login($admin);
+            }
+        }
     }
 }

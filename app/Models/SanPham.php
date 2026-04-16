@@ -17,4 +17,9 @@ class SanPham extends Model
         'size',
         'so_luong'
     ];
+
+    public function kho()
+    {
+        return $this->hasOne(Kho::class, 'san_pham_id');
+    }
 }

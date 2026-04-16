@@ -2,20 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\SanPham;
 use Illuminate\Http\Request;
+use App\Models\SanPham;
 
 class SanPhamController extends Controller
 {
     public function index(Request $request)
     {
-        $keyword = $request->keyword;
+        $search = $request->search;
 
-        $sanphams = SanPham::when($keyword, function ($query) use ($keyword) {
-            return $query->where('ten', 'like', "%$keyword%");
+        $sanphams = SanPham::when($search, function ($query) use ($search) {
+            return $query->where('ten', 'like', "%$search%");
         })->get();
 
-        return view('sanpham.index', compact('sanphams', 'keyword'));
+        return view('sanpham.index', compact('sanphams', 'search'));
     }
 
     public function create()
@@ -25,18 +25,30 @@ class SanPhamController extends Controller
 
     public function store(Request $request)
     {
-        $data = $request->all();
+        $filename = null;
 
+        // ✅ UPLOAD ẢNH
         if ($request->hasFile('hinh')) {
             $file = $request->file('hinh');
-            $filename = time().'.'.$file->getClientOriginalExtension();
-            $file->move(public_path('images'), $filename);
-            $data['hinh'] = $filename;
+
+            // tạo tên file
+            $filename = time() . '.' . $file->getClientOriginalExtension();
+
+            // lưu vào public/uploads
+            $file->move(public_path('uploads'), $filename);
         }
 
-        SanPham::create($data);
+        // ✅ LƯU DATABASE
+        SanPham::create([
+            'ten' => $request->ten,
+            'gia' => $request->gia,
+            'size' => $request->size,
+            'so_luong' => $request->so_luong,
+            'mo_ta' => $request->mo_ta,
+            'hinh' => $filename
+        ]);
 
-        return redirect('/sanpham')->with('success', 'Thêm thành công!');
+        return redirect('/sanpham')->with('success', 'Thêm sản phẩm thành công!');
     }
 
     public function edit($id)
@@ -48,16 +60,27 @@ class SanPhamController extends Controller
     public function update(Request $request, $id)
     {
         $sp = SanPham::find($id);
-        $data = $request->all();
 
+        $filename = $sp->hinh;
+
+        // ✅ nếu có ảnh mới
         if ($request->hasFile('hinh')) {
             $file = $request->file('hinh');
-            $filename = time().'.'.$file->getClientOriginalExtension();
-            $file->move(public_path('images'), $filename);
-            $data['hinh'] = $filename;
+
+            $filename = time() . '.' . $file->getClientOriginalExtension();
+
+            $file->move(public_path('uploads'), $filename);
         }
 
-        $sp->update($data);
+        // ✅ update dữ liệu
+        $sp->update([
+            'ten' => $request->ten,
+            'gia' => $request->gia,
+            'size' => $request->size,
+            'so_luong' => $request->so_luong,
+            'mo_ta' => $request->mo_ta,
+            'hinh' => $filename
+        ]);
 
         return redirect('/sanpham')->with('success', 'Cập nhật thành công!');
     }
