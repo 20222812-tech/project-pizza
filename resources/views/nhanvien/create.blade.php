@@ -1,43 +1,37 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Thêm nhân viên</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body class="bg-light">
+@extends('layouts.app')
 
-<div class="container mt-5">
+@section('content')
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h2 class="text-center text-success mb-4">➕ Thêm nhân viên</h2>
 
-    <h2 class="text-center text-success mb-4">➕ Thêm nhân viên</h2>
+                @if($errors->any())
+                    <div class="alert alert-danger">
+                        <ul class="mb-0">
+                            @foreach($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
 
-    <form action="/nhanvien/store" method="POST" class="card p-4 shadow">
-        @csrf
+                <form action="/nhanvien/store" method="POST">
+                    @csrf
 
-        <div class="mb-3">
-            <label>Tên</label>
-            <input type="text" name="ten" class="form-control" required>
+                    <input name="ten" value="{{ old('ten') }}" class="form-control mb-2" placeholder="Tên">
+                    <input name="email" value="{{ old('email') }}" class="form-control mb-2" placeholder="Email">
+                    <input name="sdt" value="{{ old('sdt') }}" class="form-control mb-2" placeholder="SĐT">
+                    <input name="chuc_vu" value="{{ old('chuc_vu') }}" class="form-control mb-2" placeholder="Chức vụ">
+
+                    <div class="d-flex justify-content-between">
+                        <a href="/nhanvien" class="btn btn-secondary">⬅ Quay lại</a>
+                        <button class="btn btn-success">Thêm</button>
+                    </div>
+                </form>
+            </div>
         </div>
-
-        <div class="mb-3">
-            <label>Email</label>
-            <input type="email" name="email" class="form-control" required>
-        </div>
-
-        <div class="mb-3">
-            <label>SĐT</label>
-            <input type="text" name="sdt" class="form-control" required>
-        </div>
-
-        <div class="mb-3">
-            <label>Chức vụ</label>
-            <input type="text" name="chuc_vu" class="form-control" required>
-        </div>
-
-        <button class="btn btn-success">Thêm</button>
-        <a href="/nhanvien" class="btn btn-secondary">Quay lại</a>
-    </form>
-
+    </div>
 </div>
-
-</body>
-</html>
+@endsection
